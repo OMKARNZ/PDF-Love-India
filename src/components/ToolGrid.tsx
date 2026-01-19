@@ -31,10 +31,9 @@ const tools = [
   {
     id: "convert",
     icon: FileOutput,
-    title: "Convert to PDF",
-    description: "Transform images and documents into PDF format instantly.",
+    title: "Image to PDF",
+    description: "Convert JPG, JPEG, and PNG images into a single PDF document.",
     color: "purple" as const,
-    badge: "Coming Soon",
   },
 ];
 
