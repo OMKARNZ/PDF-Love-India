@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import MergePDFWorkspace from "@/components/MergePDFWorkspace";
 import SplitPDFWorkspace from "@/components/SplitPDFWorkspace";
 import CompressPDFWorkspace from "@/components/CompressPDFWorkspace";
+import ImageToPDFWorkspace from "@/components/ImageToPDFWorkspace";
 
 type ActiveTool = "none" | "merge" | "split" | "compress" | "convert";
 
@@ -33,6 +34,10 @@ const Index = () => {
 
   if (activeTool === "compress") {
     return <CompressPDFWorkspace onBack={handleBack} />;
+  }
+
+  if (activeTool === "convert") {
+    return <ImageToPDFWorkspace onBack={handleBack} />;
   }
 
   // Default: Landing page

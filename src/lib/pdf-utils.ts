@@ -1,9 +1,18 @@
-import { PDFDocument } from "pdf-lib";
+import { PDFDocument, PageSizes } from "pdf-lib";
 
 export interface PDFFile {
   id: string;
   file: File;
 }
+
+export interface ImageFile {
+  id: string;
+  file: File;
+}
+
+// A4 dimensions in points (72 points per inch)
+const A4_PORTRAIT = { width: 595.28, height: 841.89 };
+const A4_LANDSCAPE = { width: 841.89, height: 595.28 };
 
 export const mergePDFs = async (
   pdfFiles: PDFFile[],
@@ -53,6 +62,71 @@ export const splitPDF = async (
   }
 
   return splitPages;
+};
+
+export const imagesToPDF = async (
+  imageFiles: ImageFile[],
+  orientation: "portrait" | "landscape" = "portrait",
+  onProgress?: (progress: number) => void
+): Promise<Uint8Array> => {
+  const pdfDoc = await PDFDocument.create();
+  const pageSize = orientation === "portrait" ? A4_PORTRAIT : A4_LANDSCAPE;
+  const totalImages = imageFiles.length;
+
+  for (let i = 0; i < imageFiles.length; i++) {
+    const imageFile = imageFiles[i];
+    const arrayBuffer = await imageFile.file.arrayBuffer();
+    const bytes = new Uint8Array(arrayBuffer);
+
+    // Determine image type and embed accordingly
+    let image;
+    const fileType = imageFile.file.type.toLowerCase();
+    
+    if (fileType === "image/png") {
+      image = await pdfDoc.embedPng(bytes);
+    } else {
+      // For jpg/jpeg
+      image = await pdfDoc.embedJpg(bytes);
+    }
+
+    // Calculate scaling to fit within page while maintaining aspect ratio
+    const imageWidth = image.width;
+    const imageHeight = image.height;
+    
+    // Add some margin (20 points on each side)
+    const margin = 40;
+    const maxWidth = pageSize.width - margin * 2;
+    const maxHeight = pageSize.height - margin * 2;
+
+    // Calculate scale factor
+    const widthScale = maxWidth / imageWidth;
+    const heightScale = maxHeight / imageHeight;
+    const scale = Math.min(widthScale, heightScale, 1); // Never scale up, only down
+
+    const scaledWidth = imageWidth * scale;
+    const scaledHeight = imageHeight * scale;
+
+    // Add a new page
+    const page = pdfDoc.addPage([pageSize.width, pageSize.height]);
+
+    // Center the image on the page
+    const x = (pageSize.width - scaledWidth) / 2;
+    const y = (pageSize.height - scaledHeight) / 2;
+
+    // Draw the image
+    page.drawImage(image, {
+      x,
+      y,
+      width: scaledWidth,
+      height: scaledHeight,
+    });
+
+    if (onProgress) {
+      onProgress(Math.round(((i + 1) / totalImages) * 100));
+    }
+  }
+
+  return pdfDoc.save();
 };
 
 export const downloadBlob = (data: Uint8Array, filename: string) => {
