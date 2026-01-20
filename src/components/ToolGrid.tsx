@@ -1,4 +1,4 @@
-import { Merge, Scissors, Minimize2, FileOutput, RotateCcw, Lock, Image, FileText } from "lucide-react";
+import { Merge, Scissors, Minimize2, FileOutput, FileSpreadsheet, Edit3, FileText as FileTextIcon, RotateCcw, Lock, Image } from "lucide-react";
 import ToolCard from "./ToolCard";
 
 interface ToolGridProps {
@@ -12,6 +12,7 @@ const tools = [
     title: "Merge PDF",
     description: "Combine multiple PDFs into a single document with drag-and-drop reordering.",
     color: "saffron" as const,
+    badge: undefined,
   },
   {
     id: "split",
@@ -19,6 +20,7 @@ const tools = [
     title: "Split PDF",
     description: "Extract pages from your PDF into separate individual files.",
     color: "green" as const,
+    badge: undefined,
   },
   {
     id: "compress",
@@ -26,7 +28,7 @@ const tools = [
     title: "Compress PDF",
     description: "Reduce file size while maintaining quality. Perfect for sharing.",
     color: "blue" as const,
-    badge: "Coming Soon",
+    badge: undefined,
   },
   {
     id: "convert",
@@ -34,6 +36,31 @@ const tools = [
     title: "Image to PDF",
     description: "Convert JPG, JPEG, and PNG images into a single PDF document.",
     color: "purple" as const,
+    badge: undefined,
+  },
+  {
+    id: "excel-to-pdf",
+    icon: FileSpreadsheet,
+    title: "Excel to PDF",
+    description: "Convert Excel spreadsheets into beautifully formatted PDF tables.",
+    color: "green" as const,
+    badge: undefined,
+  },
+  {
+    id: "edit-pdf",
+    icon: Edit3,
+    title: "Edit PDF",
+    description: "Add text, signatures, and images to your PDF documents.",
+    color: "saffron" as const,
+    badge: undefined,
+  },
+  {
+    id: "pdf-to-text",
+    icon: FileTextIcon,
+    title: "PDF to Text",
+    description: "Extract all text content from PDF files for easy copying.",
+    color: "blue" as const,
+    badge: undefined,
   },
 ];
 
@@ -52,7 +79,7 @@ const ToolGrid = ({ onSelectTool }: ToolGridProps) => {
         </div>
 
         {/* Tools Grid */}
-        <div className="mx-auto grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-2">
+        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {tools.map((tool, index) => (
             <div
               key={tool.id}
@@ -82,7 +109,6 @@ const ToolGrid = ({ onSelectTool }: ToolGridProps) => {
               { icon: RotateCcw, label: "Rotate" },
               { icon: Lock, label: "Protect" },
               { icon: Image, label: "PDF to Image" },
-              { icon: FileText, label: "OCR" },
             ].map((item) => (
               <div
                 key={item.label}

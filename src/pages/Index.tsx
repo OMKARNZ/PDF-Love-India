@@ -7,8 +7,11 @@ import MergePDFWorkspace from "@/components/MergePDFWorkspace";
 import SplitPDFWorkspace from "@/components/SplitPDFWorkspace";
 import CompressPDFWorkspace from "@/components/CompressPDFWorkspace";
 import ImageToPDFWorkspace from "@/components/ImageToPDFWorkspace";
+import ExcelToPDFWorkspace from "@/components/ExcelToPDFWorkspace";
+import EditPDFWorkspace from "@/components/EditPDFWorkspace";
+import PDFToTextWorkspace from "@/components/PDFToTextWorkspace";
 
-type ActiveTool = "none" | "merge" | "split" | "compress" | "convert";
+type ActiveTool = "none" | "merge" | "split" | "compress" | "convert" | "excel-to-pdf" | "edit-pdf" | "pdf-to-text";
 
 const Index = () => {
   const [activeTool, setActiveTool] = useState<ActiveTool>("none");
@@ -38,6 +41,18 @@ const Index = () => {
 
   if (activeTool === "convert") {
     return <ImageToPDFWorkspace onBack={handleBack} />;
+  }
+
+  if (activeTool === "excel-to-pdf") {
+    return <ExcelToPDFWorkspace onBack={handleBack} />;
+  }
+
+  if (activeTool === "edit-pdf") {
+    return <EditPDFWorkspace onBack={handleBack} />;
+  }
+
+  if (activeTool === "pdf-to-text") {
+    return <PDFToTextWorkspace onBack={handleBack} />;
   }
 
   // Default: Landing page
