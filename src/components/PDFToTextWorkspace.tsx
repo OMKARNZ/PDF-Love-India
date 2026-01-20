@@ -5,6 +5,7 @@ import { useDropzone } from "react-dropzone";
 import ProcessingState from "./ProcessingState";
 import { toast } from "@/hooks/use-toast";
 import * as pdfjsLib from "pdfjs-dist";
+import { validateFileMimeType, sanitizeFileName, safeDownload } from "@/lib/security-utils";
 
 // Set worker path
 pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.js`;
@@ -42,6 +43,17 @@ const PDFToTextWorkspace = ({ onBack }: PDFToTextWorkspaceProps) => {
     if (acceptedFiles.length === 0) return;
     
     const file = acceptedFiles[0];
+    
+    // Strict MIME-type validation
+    if (!validateFileMimeType(file, "pdf")) {
+      toast({
+        title: "Security Alert: Invalid file format",
+        description: "Only valid PDF files are allowed.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     setPdfFile(file);
     setIsProcessing(true);
     setProgress(0);
@@ -55,10 +67,15 @@ const PDFToTextWorkspace = ({ onBack }: PDFToTextWorkspaceProps) => {
         description: "Text extracted successfully."
       });
     } catch (error) {
+      console.error("Extract error:", error);
       setIsProcessing(false);
+      // Provide user-friendly error message
+      const errorMessage = error instanceof Error && error.message.includes("encrypt")
+        ? "This PDF is password-protected and cannot be read."
+        : "File appears to be corrupted or invalid. Please try another file.";
       toast({
         title: "Error",
-        description: "Failed to extract text from PDF.",
+        description: errorMessage,
         variant: "destructive"
       });
     }
@@ -89,13 +106,12 @@ const PDFToTextWorkspace = ({ onBack }: PDFToTextWorkspaceProps) => {
   };
 
   const handleDownload = () => {
-    const blob = new Blob([extractedText], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `${pdfFile?.name.replace(".pdf", "")}_text.txt`;
-    link.click();
-    URL.revokeObjectURL(url);
+    if (!pdfFile) return;
+    
+    const sanitizedName = sanitizeFileName(pdfFile.name.replace(".pdf", ""));
+    const encoder = new TextEncoder();
+    const textData = encoder.encode(extractedText);
+    safeDownload(textData, `${sanitizedName}_text.txt`, "text/plain");
     
     toast({
       title: "Downloaded!",
@@ -168,7 +184,7 @@ const PDFToTextWorkspace = ({ onBack }: PDFToTextWorkspaceProps) => {
                   <FileText className="h-6 w-6 text-india-blue" />
                 </div>
                 <div>
-                  <p className="font-medium text-foreground">{pdfFile.name}</p>
+                  <p className="font-medium text-foreground">{sanitizeFileName(pdfFile.name)}</p>
                   <p className="text-sm text-muted-foreground">
                     {extractedText.split(/\s+/).length} words extracted
                   </p>

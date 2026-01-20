@@ -44,6 +44,7 @@ const ImageToPDFWorkspace = ({ onBack }: ImageToPDFWorkspaceProps) => {
   );
 
   const handleFilesSelected = useCallback((files: File[]) => {
+    // Files are already validated by ImageDropzone with MIME-type checking
     const newImageFiles: ImageFile[] = files.map((file) => ({
       id: generateId(),
       file,
@@ -99,11 +100,15 @@ const ImageToPDFWorkspace = ({ onBack }: ImageToPDFWorkspaceProps) => {
     } catch (error) {
       console.error("Conversion error:", error);
       setStatus("error");
-      setStatusMessage("Something went wrong. Please try again.");
+      // Provide user-friendly error message
+      const errorMessage = error instanceof Error 
+        ? "One or more images could not be processed. Please ensure all files are valid images."
+        : "Something went wrong. Please try again.";
+      setStatusMessage(errorMessage);
       
       toast({
         title: "Conversion Failed",
-        description: "There was an error converting your images. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       });
       

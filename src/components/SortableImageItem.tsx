@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { GripVertical, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { sanitizeFileName } from "@/lib/security-utils";
 
 interface SortableImageItemProps {
   id: string;
@@ -14,6 +15,7 @@ interface SortableImageItemProps {
 
 const SortableImageItem = ({ id, file, index, onRemove }: SortableImageItemProps) => {
   const [preview, setPreview] = useState<string | null>(null);
+  const urlRef = useRef<string | null>(null);
 
   const {
     attributes,
@@ -29,10 +31,18 @@ const SortableImageItem = ({ id, file, index, onRemove }: SortableImageItemProps
     transition,
   };
 
+  // Memory leak prevention: properly manage object URLs
   useEffect(() => {
     const url = URL.createObjectURL(file);
+    urlRef.current = url;
     setPreview(url);
-    return () => URL.revokeObjectURL(url);
+    
+    return () => {
+      if (urlRef.current) {
+        URL.revokeObjectURL(urlRef.current);
+        urlRef.current = null;
+      }
+    };
   }, [file]);
 
   const formatFileSize = (bytes: number) => {
@@ -42,6 +52,9 @@ const SortableImageItem = ({ id, file, index, onRemove }: SortableImageItemProps
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
+
+  // Sanitize filename for display to prevent XSS
+  const displayName = sanitizeFileName(file.name);
 
   return (
     <div
@@ -81,7 +94,7 @@ const SortableImageItem = ({ id, file, index, onRemove }: SortableImageItemProps
         {preview && (
           <img
             src={preview}
-            alt={file.name}
+            alt={displayName}
             className="h-full w-full object-cover"
           />
         )}
@@ -89,7 +102,7 @@ const SortableImageItem = ({ id, file, index, onRemove }: SortableImageItemProps
 
       {/* File Info */}
       <div className="w-full text-center">
-        <p className="text-xs font-medium text-foreground truncate px-1">{file.name}</p>
+        <p className="text-xs font-medium text-foreground truncate px-1">{displayName}</p>
         <p className="text-xs text-muted-foreground">{formatFileSize(file.size)}</p>
       </div>
     </div>

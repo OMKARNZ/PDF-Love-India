@@ -1,4 +1,4 @@
-import { FileText, Heart } from "lucide-react";
+import { FileText, Shield } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -21,14 +21,15 @@ const Footer = () => {
             your files never leave your device.
           </p>
 
-          {/* Made with love */}
-          <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-            Made with <Heart className="h-4 w-4 fill-primary text-primary" /> for India
+          {/* Privacy Badge */}
+          <div className="flex items-center gap-1.5 text-sm text-india-green">
+            <Shield className="h-4 w-4" />
+            100% Private & Secure
           </div>
 
           {/* Copyright */}
           <p className="text-sm text-muted-foreground/70">
-            © {new Date().getFullYear()} PDF Love India. All rights reserved.
+            © 2026 PDF Love India. All rights reserved.
           </p>
         </div>
       </div>

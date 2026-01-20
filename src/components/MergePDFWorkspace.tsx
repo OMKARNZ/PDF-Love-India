@@ -40,6 +40,7 @@ const MergePDFWorkspace = ({ onBack }: MergePDFWorkspaceProps) => {
   );
 
   const handleFilesSelected = useCallback((files: File[]) => {
+    // Files are already validated by FileDropzone with MIME-type checking
     const newPdfFiles: PDFFile[] = files.map((file) => ({
       id: generateId(),
       file,
@@ -88,8 +89,13 @@ const MergePDFWorkspace = ({ onBack }: MergePDFWorkspaceProps) => {
         setPdfFiles([]);
       }, 3000);
     } catch (error) {
+      console.error("Merge error:", error);
       setStatus("error");
-      setStatusMessage("Something went wrong. Please try again.");
+      // Provide user-friendly error message
+      const errorMessage = error instanceof Error && error.message.includes("encrypt")
+        ? "One or more PDFs are password-protected and cannot be merged."
+        : "File appears to be corrupted or invalid. Please try again.";
+      setStatusMessage(errorMessage);
       setTimeout(() => setStatus("idle"), 3000);
     }
   };
