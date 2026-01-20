@@ -1,6 +1,5 @@
-import { FileText, Menu, X } from "lucide-react";
+import { FileText, Menu, X, Shield } from "lucide-react";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -26,9 +25,11 @@ const Header = () => {
           <a href="#about" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
             About
           </a>
-          <Button variant="india" size="sm">
-            Get Started
-          </Button>
+          {/* Privacy Badge */}
+          <div className="flex items-center gap-2 rounded-full bg-india-green/10 border border-india-green/20 px-4 py-2">
+            <Shield className="h-4 w-4 text-india-green" />
+            <span className="text-sm font-medium text-india-green">100% Private & Free</span>
+          </div>
         </nav>
 
         {/* Mobile Menu Button */}
@@ -58,9 +59,11 @@ const Header = () => {
             >
               About
             </a>
-            <Button variant="india" size="sm" className="w-full">
-              Get Started
-            </Button>
+            {/* Privacy Badge - Mobile */}
+            <div className="flex items-center justify-center gap-2 rounded-full bg-india-green/10 border border-india-green/20 px-4 py-2">
+              <Shield className="h-4 w-4 text-india-green" />
+              <span className="text-sm font-medium text-india-green">100% Private & Free</span>
+            </div>
           </nav>
         </div>
       )}
