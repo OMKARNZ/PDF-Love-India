@@ -49,8 +49,13 @@ const SplitPDFWorkspace = ({ onBack }: SplitPDFWorkspaceProps) => {
       setStatusMessage(`Split into ${pages.length} pages!`);
       celebrateSuccess();
     } catch (error) {
+      console.error("Split error:", error);
       setStatus("error");
-      setStatusMessage("Something went wrong. Please try again.");
+      // Provide user-friendly error message
+      const errorMessage = error instanceof Error && error.message.includes("encrypt")
+        ? "This PDF is password-protected and cannot be split."
+        : "File appears to be corrupted or invalid. Please try again.";
+      setStatusMessage(errorMessage);
       setTimeout(() => setStatus("idle"), 3000);
     }
   };

@@ -2,6 +2,8 @@ import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { Upload, ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { validateFiles, sanitizeFileName } from "@/lib/security-utils";
+import { toast } from "@/hooks/use-toast";
 
 interface ImageDropzoneProps {
   onFilesSelected: (files: File[]) => void;
@@ -18,8 +20,21 @@ const ImageDropzone = ({
 }: ImageDropzoneProps) => {
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
-      if (acceptedFiles.length > 0) {
-        onFilesSelected(acceptedFiles);
+      if (acceptedFiles.length === 0) return;
+
+      // Strict MIME-type validation
+      const { validFiles, invalidFiles } = validateFiles(acceptedFiles, "image");
+
+      if (invalidFiles.length > 0) {
+        toast({
+          title: "Security Alert: Invalid file format",
+          description: `Rejected: ${invalidFiles.join(", ")}. Only JPG, JPEG, and PNG images are allowed.`,
+          variant: "destructive",
+        });
+      }
+
+      if (validFiles.length > 0) {
+        onFilesSelected(validFiles);
       }
     },
     [onFilesSelected]

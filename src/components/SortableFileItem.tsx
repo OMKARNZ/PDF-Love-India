@@ -3,6 +3,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { GripVertical, FileText, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { sanitizeFileName } from "@/lib/security-utils";
 
 interface SortableFileItemProps {
   id: string;
@@ -34,6 +35,9 @@ const SortableFileItem = ({ id, file, index, onRemove }: SortableFileItemProps) 
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
+  // Sanitize filename for display to prevent XSS
+  const displayName = sanitizeFileName(file.name);
+
   return (
     <div
       ref={setNodeRef}
@@ -64,7 +68,7 @@ const SortableFileItem = ({ id, file, index, onRemove }: SortableFileItemProps) 
 
       {/* File Info */}
       <div className="flex-1 min-w-0">
-        <p className="font-medium text-foreground truncate">{file.name}</p>
+        <p className="font-medium text-foreground truncate">{displayName}</p>
         <p className="text-sm text-muted-foreground">{formatFileSize(file.size)}</p>
       </div>
 

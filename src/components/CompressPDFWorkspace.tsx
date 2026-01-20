@@ -6,6 +6,7 @@ import ProcessingState from "./ProcessingState";
 import { celebrateSuccess } from "@/lib/confetti";
 import { toast } from "@/hooks/use-toast";
 import { PDFDocument } from "pdf-lib";
+import { validateFileMimeType, sanitizeFileName, safeDownload } from "@/lib/security-utils";
 
 interface CompressPDFWorkspaceProps {
   onBack: () => void;
@@ -73,6 +74,17 @@ const CompressPDFWorkspace = ({ onBack }: CompressPDFWorkspaceProps) => {
     if (acceptedFiles.length === 0) return;
     
     const file = acceptedFiles[0];
+    
+    // Strict MIME-type validation
+    if (!validateFileMimeType(file, "pdf")) {
+      toast({
+        title: "Security Alert: Invalid file format",
+        description: "Only valid PDF files are allowed.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     setPdfFile(file);
     setOriginalSize(file.size);
     setIsCompressed(false);
@@ -116,10 +128,15 @@ const CompressPDFWorkspace = ({ onBack }: CompressPDFWorkspaceProps) => {
         description: `Reduced from ${formatBytes(pdfFile.size)} to ${formatBytes(compressed.length)}`
       });
     } catch (error) {
+      console.error("Compression error:", error);
       setIsProcessing(false);
+      // Provide user-friendly error message
+      const errorMessage = error instanceof Error && error.message.includes("encrypt")
+        ? "This PDF is password-protected and cannot be compressed."
+        : "File appears to be corrupted or invalid. Please try another file.";
       toast({
         title: "Error",
-        description: "Failed to compress PDF. The file may be protected.",
+        description: errorMessage,
         variant: "destructive"
       });
     }
@@ -128,13 +145,8 @@ const CompressPDFWorkspace = ({ onBack }: CompressPDFWorkspaceProps) => {
   const handleDownload = () => {
     if (!compressedPdf || !pdfFile) return;
     
-    const blob = new Blob([new Uint8Array(compressedPdf)], { type: "application/pdf" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `compressed_${pdfFile.name}`;
-    link.click();
-    URL.revokeObjectURL(url);
+    const sanitizedName = sanitizeFileName(`compressed_${pdfFile.name}`);
+    safeDownload(compressedPdf, sanitizedName, "application/pdf");
   };
 
   const handleClear = () => {
@@ -209,7 +221,7 @@ const CompressPDFWorkspace = ({ onBack }: CompressPDFWorkspaceProps) => {
                   <Minimize2 className="h-7 w-7 text-india-blue" />
                 </div>
                 <div className="flex-1">
-                  <p className="font-medium text-foreground truncate">{pdfFile.name}</p>
+                  <p className="font-medium text-foreground truncate">{sanitizeFileName(pdfFile.name)}</p>
                   <p className="text-sm text-muted-foreground">
                     Original size: {formatBytes(originalSize)}
                   </p>

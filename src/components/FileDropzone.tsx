@@ -2,6 +2,8 @@ import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { Upload, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { validateFiles, sanitizeFileName, FileCategory } from "@/lib/security-utils";
+import { toast } from "@/hooks/use-toast";
 
 interface FileDropzoneProps {
   onFilesSelected: (files: File[]) => void;
@@ -9,6 +11,7 @@ interface FileDropzoneProps {
   multiple?: boolean;
   maxFiles?: number;
   className?: string;
+  fileCategory?: FileCategory;
 }
 
 const FileDropzone = ({
@@ -17,14 +20,28 @@ const FileDropzone = ({
   multiple = true,
   maxFiles = 20,
   className,
+  fileCategory = "pdf",
 }: FileDropzoneProps) => {
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
-      if (acceptedFiles.length > 0) {
-        onFilesSelected(acceptedFiles);
+      if (acceptedFiles.length === 0) return;
+
+      // Strict MIME-type validation
+      const { validFiles, invalidFiles } = validateFiles(acceptedFiles, fileCategory);
+
+      if (invalidFiles.length > 0) {
+        toast({
+          title: "Security Alert: Invalid file format",
+          description: `Rejected: ${invalidFiles.join(", ")}. Only valid ${fileCategory.toUpperCase()} files are allowed.`,
+          variant: "destructive",
+        });
+      }
+
+      if (validFiles.length > 0) {
+        onFilesSelected(validFiles);
       }
     },
-    [onFilesSelected]
+    [onFilesSelected, fileCategory]
   );
 
   const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
