@@ -3,117 +3,112 @@
 @tailwind utilities;
 
 /* PDF Love India Design System
-   Digital India aesthetic - Saffron, White, Green
+   Apple-inspired premium aesthetic
    All colors in HSL format
 */
 
 @layer base {
   :root {
-    /* Base Colors - Clean, Professional */
-    --background: 0 0% 99%;
-    --foreground: 220 20% 10%;
+    /* Apple-inspired Color Palette */
+    --background: 240 5% 96.5%;
+    --foreground: 0 0% 10%;
 
-    /* Card & Surface Colors */
+    /* Card & Surface Colors - Pure white cards */
     --card: 0 0% 100%;
-    --card-foreground: 220 20% 10%;
+    --card-foreground: 0 0% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 20% 10%;
+    --popover-foreground: 0 0% 10%;
 
-    /* Primary - Saffron/Orange (Indian Flag) */
-    --primary: 30 100% 50%;
+    /* Primary - Refined Blue Accent */
+    --primary: 211 100% 50%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary - Soft gray for contrast */
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 220 20% 25%;
+    /* Secondary - Ultra soft gray */
+    --secondary: 240 5% 96%;
+    --secondary-foreground: 0 0% 25%;
 
     /* Muted States */
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 10% 45%;
+    --muted: 240 5% 96%;
+    --muted-foreground: 0 0% 45%;
 
-    /* Accent - Indian Green */
-    --accent: 145 85% 28%;
+    /* Accent - Subtle teal */
+    --accent: 211 100% 50%;
     --accent-foreground: 0 0% 100%;
 
     /* Destructive */
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Borders & Inputs */
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 30 100% 50%;
+    /* Borders & Inputs - Very subtle */
+    --border: 0 0% 92%;
+    --input: 0 0% 92%;
+    --ring: 211 100% 50%;
 
-    --radius: 0.75rem;
+    --radius: 1.5rem;
 
-    /* Custom PDF Love India Colors */
-    --saffron: 30 100% 50%;
-    --indian-green: 145 85% 28%;
-    --india-blue: 240 100% 25%;
+    /* Glass morphism colors */
+    --glass: 0 0% 100% / 0.7;
+    --glass-border: 0 0% 100% / 0.3;
     
-    /* Gradient Variables */
-    --gradient-india: linear-gradient(135deg, hsl(30 100% 50%) 0%, hsl(145 85% 28%) 100%);
-    --gradient-saffron: linear-gradient(135deg, hsl(30 100% 55%) 0%, hsl(30 100% 45%) 100%);
-    --gradient-hero: linear-gradient(180deg, hsl(30 100% 98%) 0%, hsl(0 0% 100%) 100%);
-    
-    /* Shadows */
-    --shadow-card: 0 4px 20px -4px hsl(220 20% 10% / 0.08);
-    --shadow-card-hover: 0 12px 32px -8px hsl(220 20% 10% / 0.12);
-    --shadow-button: 0 4px 14px -2px hsl(30 100% 50% / 0.35);
+    /* Premium shadows */
+    --shadow-sm: 0 1px 2px hsl(0 0% 0% / 0.04);
+    --shadow-card: 0 4px 24px -4px hsl(0 0% 0% / 0.08), 0 2px 8px -2px hsl(0 0% 0% / 0.04);
+    --shadow-card-hover: 0 20px 50px -12px hsl(0 0% 0% / 0.15), 0 8px 24px -8px hsl(0 0% 0% / 0.08);
+    --shadow-button: 0 2px 8px -2px hsl(211 100% 50% / 0.3);
+    --shadow-glass: 0 8px 32px -8px hsl(0 0% 0% / 0.1);
 
     /* Sidebar */
     --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 220 10% 30%;
-    --sidebar-primary: 30 100% 50%;
+    --sidebar-foreground: 0 0% 30%;
+    --sidebar-primary: 211 100% 50%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 145 85% 28%;
+    --sidebar-accent: 211 100% 50%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 30 100% 50%;
+    --sidebar-border: 0 0% 92%;
+    --sidebar-ring: 211 100% 50%;
   }
 
   .dark {
-    --background: 220 25% 8%;
+    --background: 0 0% 8%;
     --foreground: 0 0% 95%;
 
-    --card: 220 25% 10%;
+    --card: 0 0% 12%;
     --card-foreground: 0 0% 95%;
 
-    --popover: 220 25% 10%;
+    --popover: 0 0% 12%;
     --popover-foreground: 0 0% 95%;
 
-    --primary: 30 100% 55%;
-    --primary-foreground: 220 25% 8%;
+    --primary: 211 100% 60%;
+    --primary-foreground: 0 0% 8%;
 
-    --secondary: 220 20% 18%;
+    --secondary: 0 0% 15%;
     --secondary-foreground: 0 0% 90%;
 
-    --muted: 220 20% 18%;
-    --muted-foreground: 220 10% 55%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 55%;
 
-    --accent: 145 75% 40%;
+    --accent: 211 100% 60%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 70% 45%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 20% 18%;
-    --input: 220 20% 18%;
-    --ring: 30 100% 55%;
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 211 100% 60%;
 
-    --saffron: 30 100% 55%;
-    --indian-green: 145 75% 40%;
-    --india-blue: 240 80% 60%;
+    --glass: 0 0% 12% / 0.8;
+    --glass-border: 0 0% 100% / 0.1;
 
-    --sidebar-background: 220 25% 8%;
+    --sidebar-background: 0 0% 8%;
     --sidebar-foreground: 0 0% 90%;
-    --sidebar-primary: 30 100% 55%;
-    --sidebar-primary-foreground: 220 25% 8%;
-    --sidebar-accent: 145 75% 40%;
+    --sidebar-primary: 211 100% 60%;
+    --sidebar-primary-foreground: 0 0% 8%;
+    --sidebar-accent: 211 100% 60%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 220 20% 18%;
-    --sidebar-ring: 30 100% 55%;
+    --sidebar-border: 0 0% 18%;
+    --sidebar-ring: 211 100% 60%;
   }
 }
 
@@ -122,58 +117,87 @@
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
-    font-feature-settings: "cv11", "ss01";
+    font-feature-settings: "cv11", "ss01", "ss03";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
 @layer utilities {
-  .gradient-india {
-    background: linear-gradient(135deg, hsl(var(--saffron)) 0%, hsl(var(--indian-green)) 100%);
+  /* Glass morphism */
+  .glass {
+    background: hsl(var(--glass));
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid hsl(var(--glass-border));
   }
 
-  .gradient-saffron {
-    background: linear-gradient(135deg, hsl(30 100% 55%) 0%, hsl(30 100% 45%) 100%);
+  .glass-subtle {
+    background: hsl(0 0% 100% / 0.5);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
   }
 
-  .text-gradient-india {
-    background: linear-gradient(135deg, hsl(var(--saffron)) 0%, hsl(var(--indian-green)) 100%);
+  /* Premium shadows */
+  .shadow-premium {
+    box-shadow: var(--shadow-card);
+  }
+
+  .shadow-premium-hover {
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .shadow-glass {
+    box-shadow: var(--shadow-glass);
+  }
+
+  /* Text gradient */
+  .text-gradient {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(211 100% 65%) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  .shadow-card {
-    box-shadow: var(--shadow-card);
+  /* Bento grid */
+  .bento-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   }
 
-  .shadow-card-hover {
+  @media (min-width: 768px) {
+    .bento-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+  }
+
+  /* Card hover effect */
+  .card-hover {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card-hover:hover {
+    transform: translateY(-4px);
     box-shadow: var(--shadow-card-hover);
   }
 
-  .shadow-button {
-    box-shadow: var(--shadow-button);
-  }
-}
-
-/* Smooth page transitions */
-@layer base {
-  html {
-    scroll-behavior: smooth;
-  }
-}
-
-/* Custom scrollbar */
-@layer utilities {
+  /* Custom scrollbar - minimal */
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: hsl(var(--muted-foreground) / 0.3) transparent;
+    scrollbar-color: hsl(var(--muted-foreground) / 0.2) transparent;
   }
 
   .scrollbar-thin::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 4px;
+    height: 4px;
   }
 
   .scrollbar-thin::-webkit-scrollbar-track {
@@ -181,11 +205,23 @@
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--muted-foreground) / 0.3);
-    border-radius: 3px;
+    background-color: hsl(var(--muted-foreground) / 0.2);
+    border-radius: 2px;
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    background-color: hsl(var(--muted-foreground) / 0.5);
+    background-color: hsl(var(--muted-foreground) / 0.4);
+  }
+}
+
+/* Typography refinements */
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    letter-spacing: -0.025em;
+    font-weight: 600;
+  }
+
+  h1 {
+    letter-spacing: -0.04em;
   }
 }
