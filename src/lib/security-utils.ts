@@ -16,11 +16,16 @@ export type FileCategory = 'pdf' | 'image' | 'excel';
 /**
  * Validates a file's MIME type against allowed types
  * @param file - The file to validate
- * @param category - The expected file category
+ * @param category - The expected file category or array of MIME types
  * @returns true if valid, false otherwise
  */
-export const validateFileMimeType = (file: File, category: FileCategory): boolean => {
+export const validateFileMimeType = (file: File, category: FileCategory | string[]): boolean => {
   const mimeType = file.type.toLowerCase();
+  
+  // Handle array of MIME types directly
+  if (Array.isArray(category)) {
+    return category.map(t => t.toLowerCase()).includes(mimeType);
+  }
   
   switch (category) {
     case 'pdf':
